@@ -15,39 +15,27 @@
  * limitations under the License.
  */
 
-package com.cdancy.jenkins.rest;
+package com.cdancy.jenkins.rest.features;
 
-import java.io.Closeable;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
+import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
+import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
+import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
+import org.jclouds.rest.annotations.*;
 
-import com.cdancy.jenkins.rest.features.*;
-import org.jclouds.rest.annotations.Delegate;
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 
-public interface JenkinsApi extends Closeable {
+@RequestFilters(JenkinsAuthenticationFilter.class)
+@Path("/")
+public interface ScriptApi {
 
-    @Delegate
-    CrumbIssuerApi crumbIssuerApi();
-
-    @Delegate
-    JobsApi jobsApi();
-
-    @Delegate
-    PluginManagerApi pluginManagerApi();
-
-    @Delegate
-    QueueApi queueApi();
-
-    @Delegate
-    StatisticsApi statisticsApi();
-
-    @Delegate
-    SystemApi systemApi();
-
-    @Delegate
-    ConfigurationAsCodeApi configurationAsCodeApi();
-
-    @Delegate
-    UserApi userApi();
-
-    @Delegate
-    ScriptApi scriptApi();
+    @Named("script:apply")
+    @Path("scriptText")
+    @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+    @ResponseParser(RequestStatusParser.class)
+    @POST
+    RequestStatus runScript(@FormParam("script") String script);
 }
