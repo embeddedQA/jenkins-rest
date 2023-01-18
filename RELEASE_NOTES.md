@@ -1,3 +1,6 @@
+### Version 1.0.3 (January 18, 2023)
+* ADDED: Add possiblity runScript by jenkinsAPI
+
 ### Version 1.0.2 (September 29, 2022)
 * ADDED: extensive build info. - [Pull Request 259](https://github.com/cdancy/jenkins-rest/pull/259)
 
